@@ -27,19 +27,17 @@ abstract class AbstractFilterableArticleController extends TreeController
         $this->model = $model;
     }
 
-    //todo merge showCatalog and showSubCatalog methods
-    /** Returns catalog of articles with filters
+    //todo refactor handleArticles, showCatalog, showSubCatalog
+    /** Gets articles and return view
+     * @param $page
+     * @param $noFilterUrl
      * @return mixed
      */
-    public function showCatalog()
+    private function handleArticles($page, $noFilterUrl)
     {
-        $page = $this->node;
-
         $filters = ArticleFilterHandler::handleFilters($this->model);
 
-        $noFilterUrl = $page->getUrl();
-
-        $articles = $this->model->active()->with('filterModel')->customOrder($filters->getSortSelected())->paginate($filters->getCountSelected());
+        $articles = $this->model->active()->with('filterModel')->filterByModel($page, $noFilterUrl)->customOrder($filters->getSortSelected())->paginate($filters->getCountSelected());
 
         if ($articles->count()) {
             $articles->load($this->model->getRelationsInCatalog());
@@ -51,20 +49,34 @@ abstract class AbstractFilterableArticleController extends TreeController
     /** Returns catalog of articles with filters
      * @return mixed
      */
-    public function showSubCatalog()
+    public function showCatalog()
     {
         $page = $this->node;
+        $noFilterUrl = $page->getUrl();
 
-        $filters = ArticleFilterHandler::handleFilters($this->model);
+        return $this->handleArticles($page, $noFilterUrl);
+    }
 
-        $noFilterUrl = $page->parent->getUrl();
+    /** Returns catalog of articles with filters
+     * @param catalog
+     * @return mixed
+     */
+    public function showSubCatalog($catalog = null)
+    {
+        if (!$this->node) {
+            $filterModel = $this->model->getFilterModelClass();
+            $page = $filterModel::where('slug', $catalog)->active()->first();
+            if (!$page) {
+                abort(404);
+            }
+            $noFilterUrl = str_replace("/" . $page->getSlug(), "", $page->getUrl());
 
-        $articles = $this->model->active()->with('filterModel')->filterByModel($page)->customOrder($filters->getSortSelected())->paginate($filters->getCountSelected());
-
-        if ($articles->count()) {
-            $articles->load($this->model->getRelationsInCatalog());
+        } else {
+            $page = $this->node;
+            $noFilterUrl = $page->parent->getUrl();
         }
-        return view("pages." . $this->model->getViewFolder() . ".catalog", compact('page', 'articles', 'filters', 'noFilterUrl'));
+
+        return $this->handleArticles($page, $noFilterUrl);
     }
 
     /** Returns single article

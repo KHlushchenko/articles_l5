@@ -32,6 +32,16 @@ abstract class AbstractFilterableArticle extends AbstractArticle implements Filt
         return $this->countOptions;
     }
 
+    /** Returns Filter Model class object
+     * @return mixed
+     */
+    public function getFilterModelClass(){
+
+        $relatedClass = $this->filterModel()->getRelated();
+
+        return $relatedClass;
+    }
+
     //todo this method should be hardly optimized
     /** Retrieves list of possible filter model objects and returns filterOptions collection
      * @return $filtersOptions
@@ -40,8 +50,8 @@ abstract class AbstractFilterableArticle extends AbstractArticle implements Filt
     {
         $collection = collect();
         $articles = self::has('filterModel')->with('filterModel')->get();
-        
-        foreach($articles as $article){
+
+        foreach ($articles as $article) {
             $collection->push($article->filterModel);
         }
 
@@ -56,9 +66,13 @@ abstract class AbstractFilterableArticle extends AbstractArticle implements Filt
      * @param $query
      * @return mixed
      */
-    public function scopeFilterByModel($query, $page)
+    public function scopeFilterByModel($query, $page, $noFilterUrl)
     {
-        return $query->whereHas('filterModel', function($subQuery) use ($page){
+        if ($page->getUrl() == $noFilterUrl) {
+            return $query;
+        }
+
+        return $query->whereHas('filterModel', function ($subQuery) use ($page) {
             $subQuery->where("id", $page->id);
         });
     }
