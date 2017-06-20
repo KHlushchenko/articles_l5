@@ -22,8 +22,12 @@ class ComposerStaticInit07af60b8e95164aae50d9b5dfe2219ff
 
     public static $classMap = array (
         'Vis\\Articles\\Controllers\\AbstractArticleController' => __DIR__ . '/../..' . '/src/Http/Controllers/AbstractArticleController.php',
+        'Vis\\Articles\\Controllers\\AbstractFilterableArticleController' => __DIR__ . '/../..' . '/src/Http/Controllers/AbstractFilterableArticleController.php',
+        'Vis\\Articles\\Interfaces\\DateInterface' => __DIR__ . '/../..' . '/src/Interfaces/DateInterface.php',
+        'Vis\\Articles\\Interfaces\\FilterableArticleInterface' => __DIR__ . '/../..' . '/src/Interfaces/FilterableArticleInterface.php',
         'Vis\\Articles\\Models\\AbstractArticle' => __DIR__ . '/../..' . '/src/Models/AbstractArticle.php',
-        'Vis\\Articles\\Models\\InputCleaner' => __DIR__ . '/../..' . '/src/Models/InputCleaner.php',
+        'Vis\\Articles\\Models\\AbstractFilterableArticle' => __DIR__ . '/../..' . '/src/Models/AbstractFilterableArticle.php',
+        'Vis\\Articles\\Traits\\DateTrait' => __DIR__ . '/../..' . '/src/Traits/DateTrait.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

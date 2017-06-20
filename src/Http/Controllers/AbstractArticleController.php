@@ -1,116 +1,70 @@
 <?php namespace Vis\Articles\Controllers;
 
-use Illuminate\Support\Facades\Redirect;
+use Vis\Articles\Models\AbstractArticle;
 use Vis\Builder\TreeController;
-use Vis\Articles\Models\InputCleaner;
-use \Setting;
 
 abstract class AbstractArticleController extends TreeController
 {
-    protected $model;
+    /** Property that defines articles model
+     * @var
+     */
+    protected $model = "";
 
+    /** Initiates instance of model
+     * AbstractArticleController constructor.
+     */
     public function __construct()
     {
-        $this->model = new $this->model;
+        $this->setModel(new $this->model);
     }
 
+    /** Sets instance of AbstractArticle as usable Model
+     * @param AbstractArticle $model
+     */
+    private function setModel(AbstractArticle $model)
+    {
+        $this->model = $model;
+    }
+
+    /** Returns catalog of articles
+     * @return mixed
+     */
     public function showCatalog()
     {
         $page = $this->node;
 
-        $perPage = Setting::get($this->model->getPerPageSetting(), 12);
+        $sortOrder = $this->model->getSortOrder();
+        $perPage   = $this->model->getPerPage();
 
-        $articles = $this->model->active()->byCreatedAt()->paginate($perPage);
+        $articles = $this->model->active()->customOrder($sortOrder)->paginate($perPage);
+
+        if ($articles->count()) {
+            $articles->load($this->model->getRelationsInCatalog());
+        }
 
         return view("pages.".$this->model->getViewFolder() .".catalog", compact('articles', 'page'));
-    } // end showListCategory
-
-    public function showCatalogWithFilters($slug = null)
-    {
-        $filterModel = $this->model->getFilterModel();
-
-        //fixme ALL filter
-        if($slug){
-            $page = $filterModel::where('slug', $slug)->active()->first();
-            if (!$page) {
-                abort(404);
-            }
-            $noFilterUrl = str_replace("/".$page->getSlug(), "",$page->getUrl());
-        }else{
-            $page = $this->node;
-            $noFilterUrl = $page->getUrl();
-        }
-
-        $filters = $filterModel::active()->get();
-
-        $orderOptions = $this->model->getSortOptions();
-        $orderFilter = InputCleaner::getOrderByFilter();
-
-        $perPageDefault = Setting::get($this->model->getPerPageSetting(), 12);
-        $countFilter = InputCleaner::getCountFilter($perPageDefault);
-
-        $countOptions = [
-            $perPageDefault,
-            $perPageDefault*2,
-            $perPageDefault*3,
-        ];
-
-        $articles = $this->model->active()->with('type')->orderBy($orderFilter);
-
-        //fixme ALL filter
-        if( $slug ) {
-            $articles->whereParent_id($page->id);
-        }
-
-        $articles = $articles->paginate($countFilter);
-
-        return view("pages.".$this->model->getViewFolder() .".catalog_with_filters",
-            compact(
-                'page',
-                'filters',
-                'articles',
-                'noFilterUrl',
-                'perPageDefault',
-                'orderFilter',
-                'orderOptions',
-                'countFilter',
-                'countOptions'
-            )
-        );
     }
 
-    public function showSingle($slug, $id)
+    /** Returns single article
+     * @param $slug string
+     * @param $id int
+     * @return mixed
+     */
+    public function showArticle($slug, $id)
     {
-        $page = $this->model->where('id', $id)->active()->first();
+        $page = $this->model->where('id', $id)->withRelations()->active()->first();
 
         if (!$page) {
             abort(404);
         }
 
         if ($page->getSlug() != $slug) {
-            return Redirect::to($page->getUrl(), 302);
+            return redirect($page->getUrl(), 302);
         }
+
+        $page->load($this->model->getRelationsInArticle());
 
         return view("pages.".$this->model->getViewFolder().".article", compact('page'));
-    } // end showSingle
-
-    public function showSingleByParent($catalog,$slug, $id)
-    {
-        $page = $this->model->where('id', $id)->with('type')->active()->first();
-
-        if (!$page) {
-            abort(404);
-        }
-
-        if ($page->type->getSlug() != $catalog) {
-            return Redirect::to($page->getUrl(), 302);
-        }
-
-        if ($page->getSlug() != $slug) {
-            return Redirect::to($page->getUrl(), 302);
-        }
-
-        return view("pages.".$this->model->getViewFolder().".article", compact('page'));
-    } // end showSingle
+    }
 
 }

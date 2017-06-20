@@ -11,6 +11,8 @@
   "autoload": {
     "classmap": [
       "src/Models",
+      "src/Traits",
+      "src/Interfaces",
       "src/Http/Controllers"
     ],
     "psr-4": {
