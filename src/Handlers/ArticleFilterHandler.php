@@ -89,7 +89,7 @@ final class ArticleFilterHandler
      */
     private function handleCountSelected(): int
     {
-        $countSelected = $this->getFromArray(Input::get('count'), $this->model->getCountOptions()) ?: $this->model->getPerPage();
+        $countSelected = $this->getFromArray(Input::get('count'), $this->getCountOptions()) ?: $this->model->getPerPage();
 
         return $countSelected;
     }
@@ -99,7 +99,7 @@ final class ArticleFilterHandler
      */
     private function handleSortSelected(): string
     {
-        $sortSelected = $this->getFromArray(Input::get('sort'), $this->model->getSortOptions()) ?: $this->model->getSortOrder();
+        $sortSelected = $this->getFromArray(Input::get('sort'), $this->getSortOptions()) ?: $this->model->getSortOrder();
 
         return $sortSelected;
     }

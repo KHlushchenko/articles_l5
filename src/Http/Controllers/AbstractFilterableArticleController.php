@@ -37,7 +37,11 @@ abstract class AbstractFilterableArticleController extends TreeController
     {
         $filters = ArticleFilterHandler::handleFilters($this->model);
 
-        $articles = $this->model->active()->with('filterModel')->filterByModel($page, $noFilterUrl)->customOrder($filters->getSortSelected())->paginate($filters->getCountSelected());
+        $sortOrder = $filters->getSortSelected();
+        $perPage   = $filters->getCountSelected();
+        $filter    = $page->getUrl() != $noFilterUrl ? $page : null;
+
+        $articles = $this->model->active()->with('filterModel')->filterByModel($filter)->customOrder($sortOrder)->paginate($perPage);
 
         if ($articles->count()) {
             $articles->load($this->model->getRelationsInCatalog());
@@ -64,8 +68,7 @@ abstract class AbstractFilterableArticleController extends TreeController
     public function showSubCatalog($catalog = null)
     {
         if (!$this->node) {
-            $filterModel = $this->model->getFilterModelClass();
-            $page = $filterModel::where('slug', $catalog)->active()->first();
+            $page = $this->model->filterModel()->where('slug', $catalog)->active()->first();
             if (!$page) {
                 abort(404);
             }
@@ -93,7 +96,11 @@ abstract class AbstractFilterableArticleController extends TreeController
             abort(404);
         }
 
-        if ($page->filterModel->getSlug() != $catalog || $page->getSlug() != $slug) {
+        if ($page->filterModel->getSlug() != $catalog) {
+            return redirect($page->getUrl(), 302);
+        }
+
+        if ($page->getSlug() != $slug) {
             return redirect($page->getUrl(), 302);
         }
 

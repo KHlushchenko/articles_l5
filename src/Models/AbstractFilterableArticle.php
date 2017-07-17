@@ -32,16 +32,6 @@ abstract class AbstractFilterableArticle extends AbstractArticle implements Filt
         return $this->countOptions;
     }
 
-    /** Returns Filter Model class object
-     * @return mixed
-     */
-    public function getFilterModelClass(){
-
-        $relatedClass = $this->filterModel()->getRelated();
-
-        return $relatedClass;
-    }
-
     //todo this method should be hardly optimized
     /** Retrieves list of possible filter model objects and returns filterOptions collection
      * @return $filtersOptions
@@ -62,13 +52,13 @@ abstract class AbstractFilterableArticle extends AbstractArticle implements Filt
     }
 
     /** Scope to filter articles by filter model
-     * @param $page
      * @param $query
+     * @param $page
      * @return mixed
      */
-    public function scopeFilterByModel($query, $page, $noFilterUrl)
+    public function scopeFilterByModel($query, $page)
     {
-        if ($page->getUrl() == $noFilterUrl) {
+        if(!$page){
             return $query;
         }
 
