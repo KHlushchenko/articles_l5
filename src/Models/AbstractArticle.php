@@ -6,12 +6,13 @@ use \Setting;
 use Vis\Articles\Interfaces\DateInterface;
 use Vis\Articles\Traits\DateTrait;
 
+//fixme split into AbstractArticle and AbstractFilterableArticle
 abstract class AbstractArticle extends BaseModel implements DateInterface
 {
     use DateTrait;
 
     /** Defines folder in which views are stored
-     * @var
+     * @var string
      */
     protected $viewFolder = "";
 
@@ -21,12 +22,12 @@ abstract class AbstractArticle extends BaseModel implements DateInterface
     protected $sortOrder = 'created_at:desc';
 
     /** Optional property. Defines setting name that contains pagination number
-     * @var
+     * @var string
      */
     protected $perPageSettingName = "";
 
     /** Defines pagination number
-     * @var
+     * @var int
      */
     protected $perPage = 12;
 
@@ -39,6 +40,18 @@ abstract class AbstractArticle extends BaseModel implements DateInterface
      * @var array
      */
     protected $relationsInArticle = [];
+
+    /** Defines array of arrays of sorting options
+     * Signature: [ ['name', 'description', 'value']
+     * @var array
+     */
+    protected $sortOptions = [];
+
+    /** Defines array of arrays of counting options
+     * Signature: [ ['name', 'description', 'value']
+     * @var array
+     */
+    protected $countOptions = [];
 
     /** Returns viewFolder property
      * @return string
@@ -82,6 +95,36 @@ abstract class AbstractArticle extends BaseModel implements DateInterface
     public function getRelationsInArticle(): array
     {
         return $this->relationsInArticle;
+    }
+
+    public function getSortOptions(): array
+    {
+        return $this->sortOptions;
+    }
+
+    /** Returns countOptions property
+     * @return array
+     */
+    public function getCountOptions(): array
+    {
+        return $this->countOptions;
+    }
+
+    /** Scope to filter articles by filter model
+     * @param $query
+     * @param $page
+     * @param $filterName
+     * @return mixed
+     */
+    public function scopeFilterByModel($query, $page, $filterName)
+    {
+        if (!$page) {
+            return $query;
+        }
+
+        return $query->whereHas($filterName, function ($subQuery) use ($page) {
+            $subQuery->where("id", $page->id);
+        });
     }
 
     /** Scope to retrieve only articles for main page
