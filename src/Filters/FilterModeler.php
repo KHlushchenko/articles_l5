@@ -62,7 +62,7 @@ final class FilterModeler extends AbstractFilter
         return url()->current();
     }
 
-    /** Handles modelOptions filter
+    /** Handles modelOptions property
      * @return mixed
      */
     private function handleModelOptions()
@@ -81,7 +81,7 @@ final class FilterModeler extends AbstractFilter
         return $modelOptions;
     }
 
-    /** Handles modelSelected filter
+    /** Handles modelSelected property
      * @return mixed
      */
     private function handleModelSelected()

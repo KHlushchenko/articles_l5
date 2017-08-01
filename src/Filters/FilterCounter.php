@@ -23,10 +23,18 @@ final class FilterCounter extends AbstractFilter
         return $this->countSelected;
     }
 
+    /** Handles countSelected property
+     * @return string
+     */
+    private function handleCountSelected()
+    {
+        return $this->getFromArray('count', $this->getCountOptions()) ?: $this->model->getPerPage();
+    }
+
     /** Handles filters
      */
     public function handle()
     {
-        $this->countSelected = $this->getFromArray('count', $this->getCountOptions()) ?: $this->model->getPerPage();
+        $this->countSelected = $this->handleCountSelected();
     }
 }

@@ -21,9 +21,14 @@ final class FilterComposite
     private $counter;
 
     /** Defines model filter object
-     * @var array
+     * @var Collection
      */
     private $modeler;
+
+    /** Defines dateRanger filter object
+     * @var FilterDateRanger
+     */
+    private $dateRanger;
 
     /**
      * ArticleFilterComposite constructor. Defined as private to prevent initiating of object
@@ -56,6 +61,13 @@ final class FilterComposite
         return $this;
     }
 
+    public function addDateRanger()
+    {
+        $this->dateRanger = new FilterDateRanger($this->model);
+
+        return $this;
+    }
+
     /**
      * @return FilterSorter
      */
@@ -70,6 +82,14 @@ final class FilterComposite
     public function getCounter(): FilterCounter
     {
         return $this->counter;
+    }
+
+    /**
+     * @return FilterDateRanger
+     */
+    public function getDateRanger(): FilterDateRanger
+    {
+        return $this->dateRanger;
     }
 
     /**
@@ -88,6 +108,10 @@ final class FilterComposite
         }
         if ($this->counter) {
             $this->counter->handle();
+        }
+
+        if ($this->dateRanger) {
+            $this->dateRanger->handle();
         }
 
         foreach ($this->modeler as $modeler) {

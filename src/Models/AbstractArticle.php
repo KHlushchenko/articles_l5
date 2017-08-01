@@ -1,5 +1,7 @@
 <?php namespace Vis\Articles\Models;
 
+use Carbon\Carbon;
+
 use \BaseModel;
 use \Setting;
 
@@ -52,6 +54,11 @@ abstract class AbstractArticle extends BaseModel implements DateInterface
      * @var array
      */
     protected $countOptions = [];
+
+    /** Defines dateField for model
+     * @var string
+     */
+    protected $dateField = 'created_at';
 
     /** Returns viewFolder property
      * @return string
@@ -110,6 +117,14 @@ abstract class AbstractArticle extends BaseModel implements DateInterface
         return $this->countOptions;
     }
 
+    /** Returns dateField property
+     * @return string
+     */
+    public function getDateField(): string
+    {
+        return $this->dateField;
+    }
+
     /** Scope to filter articles by filter model
      * @param $query
      * @param $page
@@ -148,5 +163,16 @@ abstract class AbstractArticle extends BaseModel implements DateInterface
         }
 
         return $query;
+    }
+
+    /** Scope to filter articles by date field
+     * @param $query
+     * @param Carbon $dateFrom
+     * @param Carbon $dateTo
+     * @return mixed
+     */
+    public function scopeDateRange($query, Carbon $dateFrom, Carbon $dateTo)
+    {
+       return $query->whereBetween($this->getDateField(), [$dateFrom, $dateTo]);
     }
 }

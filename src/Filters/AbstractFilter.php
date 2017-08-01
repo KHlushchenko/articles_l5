@@ -1,9 +1,10 @@
 <?php namespace Vis\Articles\Filters;
 
+use Vis\Articles\Interfaces\FilterInterface;
 use Vis\Articles\Models\AbstractArticle;
 use Illuminate\Support\Facades\Input;
 
-abstract class AbstractFilter
+abstract class AbstractFilter implements FilterInterface
 {
     /** Defines articles model that will be used
      * @var AbstractArticle
@@ -20,27 +21,30 @@ abstract class AbstractFilter
         $this->model = $model;
     }
 
-    /**
-     * @param string $needle
+    /** Helper function to get value from array set in model
+     * @param string $inputKey
      * @param array $array
      * @param string $column
      * @return string
      */
-    protected function getFromArray(string $needle, array $array, string $column = 'name'): string
+    protected function getFromArray(string $inputKey, array $array, string $column = 'name'): string
     {
-        $needle = Input::get($needle);
+        $value = $this->getFromInput($inputKey);
 
-        if ($needle === null || ($key = array_search($needle, array_column($array, $column))) === false) {
+        if ($value === null || ($key = array_search($value, array_column($array, $column))) === false) {
             return '';
         }
 
         return $array[$key]['value'];
     }
 
-    //fixme move this method to interface?
-
-    /** Handles filters
+    /** Helper function to get value from Input by key
+     * @param $key
+     * @return mixed
      */
-    abstract public function handle();
-
+    protected function getFromInput($key)
+    {
+        return Input::get($key);
+    }
 }
+

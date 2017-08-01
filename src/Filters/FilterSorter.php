@@ -23,10 +23,18 @@ final class FilterSorter extends AbstractFilter
         return $this->sortSelected;
     }
 
+    /** Handles sortSelected property
+     * @return string
+     */
+    private function handleSortSelected()
+    {
+        return $this->getFromArray('sort', $this->getSortOptions()) ?: $this->model->getSortOrder();
+    }
+
     /** Handles filters
      */
     public function handle()
     {
-        $this->sortSelected = $this->getFromArray('sort', $this->getSortOptions()) ?: $this->model->getSortOrder();
+        $this->sortSelected = $this->handleSortSelected();
     }
 }
