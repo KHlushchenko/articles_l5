@@ -1,8 +1,9 @@
 <?php namespace Vis\Articles\Filters;
 
-final class FilterSorter extends AbstractFilter
+final class FilterSort extends AbstractFilter
 {
-    /** Handles list of options for filter
+    /**
+     * Handles list of options for filter
      * @return array
      */
     protected function handleOptions()
@@ -10,7 +11,8 @@ final class FilterSorter extends AbstractFilter
         return $this->model->getSortOptions();
     }
 
-    /** Handles selected option for filter
+    /**
+     * Handles selected option for filter
      * @return string
      */
     protected function handleSelected()

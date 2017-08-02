@@ -1,16 +1,18 @@
 <?php namespace Vis\Articles\Controllers;
 
-use Vis\Articles\Models\AbstractArticle;
+use Vis\Articles\Interfaces\ArticleInterface;
 use Vis\Builder\TreeController;
 
 abstract class AbstractArticleController extends TreeController
 {
-    /** Property that defines articles model
-     * @var AbstractArticle
+    /**
+     * Property that defines articles model
+     * @var ArticleInterface
      */
     protected $model = "";
 
-    /** Initiates instance of model
+    /**
+     * Initiates instance of model
      * AbstractArticleController constructor.
      */
     public function __construct()
@@ -18,10 +20,11 @@ abstract class AbstractArticleController extends TreeController
         $this->setModel(new $this->model);
     }
 
-    /** Sets instance of AbstractArticle as usable Model
-     * @param AbstractArticle $model
+    /**
+     * Sets instance of ArticleInterface as usable Model
+     * @param ArticleInterface $model
      */
-    private function setModel(AbstractArticle $model)
+    private function setModel(ArticleInterface $model)
     {
         $this->model = $model;
     }

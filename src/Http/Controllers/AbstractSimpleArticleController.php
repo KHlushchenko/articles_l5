@@ -2,7 +2,8 @@
 
 abstract class AbstractSimpleArticleController extends AbstractArticleController
 {
-    /** Returns catalog of articles
+    /**
+     * Returns catalog of articles
      * @return mixed
      */
     public function showCatalog()
@@ -12,7 +13,7 @@ abstract class AbstractSimpleArticleController extends AbstractArticleController
         $sortOrder = $this->model->getSortOrder();
         $perPage   = $this->model->getPerPage();
 
-        $articles = $this->model->active()->customOrder($sortOrder)->paginate($perPage);
+        $articles = $this->model->active()->filterCustomOrder($sortOrder)->paginate($perPage);
 
         if ($articles->count()) {
             $articles->load($this->model->getRelationsInCatalog());
@@ -21,7 +22,8 @@ abstract class AbstractSimpleArticleController extends AbstractArticleController
         return view("pages.".$this->model->getViewFolder() .".catalog", compact('articles', 'page'));
     }
 
-    /** Returns single article
+    /**
+     * Returns single article
      * @param $slug string
      * @param $id int
      * @return mixed

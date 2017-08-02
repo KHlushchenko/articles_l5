@@ -1,9 +1,10 @@
 <?php namespace Vis\Articles\Traits;
 
-//fixme update to FilterDates level
+//fixme use Carbon instead of date function?
 trait DateTrait
 {
-    /** Return year from given date field name
+    /**
+     * Return year from given date field name
      * @param string $field
      * @return string
      */
@@ -12,7 +13,8 @@ trait DateTrait
         return date("Y", strtotime($this->$field));
     }
 
-    /** Return month from given date field name
+    /**
+     * Return month from given date field name
      * @param string $field
      * @return string
      */
@@ -21,7 +23,8 @@ trait DateTrait
         return date("m", strtotime($this->$field));
     }
 
-    /** Return month name from given date field name
+    /**
+     * Return month name from given date field name
      * @param string $field
      * @return string
      */
@@ -30,7 +33,8 @@ trait DateTrait
         return date("F", strtotime($this->$field));
     }
 
-    /** Return month short name from given date field name
+    /**
+     * Return month short name from given date field name
      * @param string $field
      * @return string
      */
@@ -39,7 +43,8 @@ trait DateTrait
         return date("m", strtotime($this->$field));
     }
 
-    /** Return day from given date field name
+    /**
+     * Return day from given date field name
      * @param string $field
      * @return string
      */
@@ -48,7 +53,8 @@ trait DateTrait
         return date("d", strtotime($this->$field));
     }
 
-    /** Return hour from given date field name
+    /**
+     * Return hour from given date field name
      * @param string $field
      * @return string
      */
@@ -57,7 +63,8 @@ trait DateTrait
         return date("H", strtotime($this->$field));
     }
 
-    /** Return minutes from given date field name
+    /**
+     * Return minutes from given date field name
      * @param string $field
      * @return string
      */
@@ -66,7 +73,8 @@ trait DateTrait
         return date("i", strtotime($this->$field));
     }
 
-    /** Return second from given date field name
+    /**
+     * Return second from given date field name
      * @param string $field
      * @return string
      */
@@ -75,7 +83,8 @@ trait DateTrait
         return date("s", strtotime($this->$field));
     }
 
-    /** Return date, month and year with separator from given date field name
+    /**
+     * Return date, month and year with separator from given date field name
      * @param string $field
      * @param string $dateSeparator
      * @return string
@@ -85,7 +94,8 @@ trait DateTrait
         return $this->getDay($field) . $dateSeparator . $this->getMonth($field) . $dateSeparator . $this->getYear($field);
     }
 
-    /** Return date, named month and year with separator from given date field name
+    /**
+     * Return date, named month and year with separator from given date field name
      * @param string $field
      * @param string $dateSeparator
      * @return string
@@ -95,7 +105,8 @@ trait DateTrait
         return $this->getDay($field) . $dateSeparator . $this->getNameMonth($field) . $dateSeparator . $this->getYear($field);
     }
 
-    /** Return hour and minutes with separator from given date field name
+    /**
+     * Return hour and minutes with separator from given date field name
      * @param string $field
      * @param string $timeSeparator
      * @return string
@@ -105,7 +116,8 @@ trait DateTrait
         return $this->getHour($field) . $timeSeparator . $this->getMinute($field);
     }
 
-    /** Return hour, minutes and seconds with separator from given date field name
+    /**
+     * Return hour, minutes and seconds with separator from given date field name
      * @param string $field
      * @param string $timeSeparator
      * @return string
@@ -115,7 +127,8 @@ trait DateTrait
         return $this->getHour($field) . $timeSeparator . $this->getMinute($field) . $timeSeparator . $this->getSecond($field);
     }
 
-    /** Return full date (without seconds) from given date field name with date and time separators
+    /**
+     * Return full date (without seconds) from given date field name with date and time separators
      * @param string $field
      * @param string $dateSeparator
      * @param string $timeSeparator
@@ -126,7 +139,8 @@ trait DateTrait
         return $this->getTime($field, $dateSeparator) . " " . $this->getDate($field, $timeSeparator);
     }
 
-    /** Return full date (with seconds) from given date field name with date and time separators
+    /**
+     * Return full date (with seconds) from given date field name with date and time separators
      * @param string $field
      * @param string $dateSeparator
      * @param string $timeSeparator

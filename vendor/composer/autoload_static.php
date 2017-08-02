@@ -24,9 +24,12 @@ class ComposerStaticInit07af60b8e95164aae50d9b5dfe2219ff
         'Vis\\Articles\\Controllers\\AbstractArticleController' => __DIR__ . '/../..' . '/src/Http/Controllers/AbstractArticleController.php',
         'Vis\\Articles\\Controllers\\AbstractFilterableArticleController' => __DIR__ . '/../..' . '/src/Http/Controllers/AbstractFilterableArticleController.php',
         'Vis\\Articles\\Controllers\\AbstractSimpleArticleController' => __DIR__ . '/../..' . '/src/Http/Controllers/AbstractSimpleArticleController.php',
+        'Vis\\Articles\\Interfaces\\ArticleInterface' => __DIR__ . '/../..' . '/src/Interfaces/ArticleInterface.php',
         'Vis\\Articles\\Interfaces\\DateInterface' => __DIR__ . '/../..' . '/src/Interfaces/DateInterface.php',
         'Vis\\Articles\\Interfaces\\FilterInterface' => __DIR__ . '/../..' . '/src/Interfaces/FilterInterface.php',
+        'Vis\\Articles\\Interfaces\\FilterableArticleInterface' => __DIR__ . '/../..' . '/src/Interfaces/FilterableArticleInterface.php',
         'Vis\\Articles\\Models\\AbstractArticle' => __DIR__ . '/../..' . '/src/Models/AbstractArticle.php',
+        'Vis\\Articles\\Models\\AbstractFilterableArticle' => __DIR__ . '/../..' . '/src/Models/AbstractFilterableArticle.php',
         'Vis\\Articles\\Traits\\DateTrait' => __DIR__ . '/../..' . '/src/Traits/DateTrait.php',
     );
 

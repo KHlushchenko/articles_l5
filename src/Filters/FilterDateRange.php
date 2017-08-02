@@ -2,9 +2,10 @@
 
 use Carbon\Carbon;
 
-final class FilterDateRanger extends AbstractFilter
+final class FilterDateRange extends AbstractFilter
 {
-    /** Handles list of options for filter
+    /**
+     * Handles list of options for filter
      * @return mixed
      */
     protected function handleOptions()
@@ -18,7 +19,8 @@ final class FilterDateRanger extends AbstractFilter
         ];
     }
 
-    /** Handles selected option for filter
+    /**
+     * Handles selected option for filter
      * @return string
      */
     protected function handleSelected()

@@ -4,18 +4,20 @@ use Vis\Articles\Filters\FilterComposite;
 
 abstract class AbstractFilterableArticleController extends AbstractArticleController
 {
-    /** Property that defines filter composite
+    /**
+     * Property that defines filter composite
      * @var FilterComposite
      */
     protected $filter;
 
     /**
-     * AbstractFilterableArticleController constructor.
+     * AbstractFilterableArticleController constructor. Sets filter property with FilterComposite
      */
     public function __construct()
     {
         parent::__construct();
 
+        //fixme this notification
         $this->filter = new FilterComposite($this->model);
     }
 

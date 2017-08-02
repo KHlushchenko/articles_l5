@@ -2,9 +2,10 @@
 
 use Carbon\Carbon;
 
-final class FilterDateStricter extends AbstractFilter
+final class FilterDateStrict extends AbstractFilter
 {
-    /** Handles list of options for filter
+    /**
+     * Handles list of options for filter
      * @return mixed
      */
     //fixme refactor this?
@@ -24,8 +25,10 @@ final class FilterDateStricter extends AbstractFilter
         }
 
         for ($i = 1; $i <= 12; $i++) {
-            $month[] = ['name' => $i, 'description' => Carbon::createFromFormat('!m', $i)->formatLocalized('%B'), 'value' => $i];
+            $description = Carbon::createFromFormat('!m', $i)->formatLocalized('%B');
+            $month[] = ['name' => $i, 'description' => $description, 'value' => $i];
         }
+
 
         return [
             'year'  => array_values($years),
@@ -33,7 +36,8 @@ final class FilterDateStricter extends AbstractFilter
         ];
     }
 
-    /** Handles selected option for filter
+    /**
+     * Handles selected option for filter
      * @return string
      */
     protected function handleSelected()
@@ -41,6 +45,8 @@ final class FilterDateStricter extends AbstractFilter
         return [
             'year'  => $this->getFromArray('year', $this->getOptions()['year']) ?: null,
             'month' => $this->getFromArray('month', $this->getOptions()['month']) ?: null,
+            //fixme add more reliant day filter
+            'day'  => (int) $this->getFromInput('day')
         ];
     }
 

@@ -1,145 +1,143 @@
 <?php namespace Vis\Articles\Filters;
 
-use Vis\Articles\Models\AbstractArticle;
+use Vis\Articles\Interfaces\FilterableArticleInterface;
 use Illuminate\Support\Collection as Collection;
 
 final class FilterComposite
 {
-    /** Defines articles model that will be used
-     * @var AbstractArticle
+    /**
+     * Defines articles model that will be used
+     * @var FilterableArticleInterface
      */
     private $model;
 
-    /** Defines sorter filter object
-     * @var FilterSorter
-     */
-    private $sorter;
-
-    /** Defines counter filter object
-     * @var FilterCounter
-     */
-    private $counter;
-
-    /** Defines model filter object
+    /**
+     * Defines collection of added filters
      * @var Collection
      */
-    private $modeler;
-
-    /** Defines dateRanger filter object
-     * @var FilterDateRanger
-     */
-    private $dateRanger;
-
-    /** Defines dateRanger filter object
-     * @var FilterDateStricter
-     */
-    private $dateStricter;
+    private $filters;
 
     /**
      * ArticleFilterComposite constructor. Defined as private to prevent initiating of object
-     * @param AbstractArticle $model
+     * @param FilterableArticleInterface $model
      */
-    public function __construct(AbstractArticle $model)
+    public function __construct(FilterableArticleInterface $model)
     {
         $this->model = $model;
-        $this->modeler = new Collection();
+        $this->filters = new Collection();
     }
 
-    public function addSorter()
+    /**
+     * Adds FilterSort to filters collection
+     * @return FilterComposite
+     */
+    public function addSort(): FilterComposite
     {
-        $this->sorter = new FilterSorter($this->model);
-
-        return $this;
-    }
-
-    public function addCounter()
-    {
-        $this->counter = new FilterCounter($this->model);
-
-        return $this;
-    }
-
-    public function addModeler($filterName, $page)
-    {
-        $this->modeler->push(new FilterModeler($this->model, $filterName, $page));
-
-        return $this;
-    }
-
-    public function addDateRanger()
-    {
-        $this->dateRanger = new FilterDateRanger($this->model);
-
-        return $this;
-    }
-
-    public function addDateStricter()
-    {
-        $this->dateStricter = new FilterDateStricter($this->model);
+        $this->filters->put('sort', new FilterSort($this->model));
 
         return $this;
     }
 
     /**
-     * @return FilterSorter
+     * Adds FilterSort to filters collection
+     * @return FilterComposite
      */
-    public function getSorter(): FilterSorter
+    public function addCount(): FilterComposite
     {
-        return $this->sorter;
+        $this->filters->put('count', new FilterCount($this->model));
+
+        return $this;
     }
 
     /**
-     * @return FilterCounter
+     * Adds FilterRelation to filters collection
+     * @param $relationName
+     * @param $relationSelected
+     * @return FilterComposite
      */
-    public function getCounter(): FilterCounter
+    public function addRelation($relationName, $relationSelected): FilterComposite
     {
-        return $this->counter;
+        $this->filters->put('relation-' . $relationName, new FilterRelation($this->model, $relationName, $relationSelected));
+
+        return $this;
     }
 
     /**
-     * @return FilterDateRanger
+     * Adds FilterDateRange to filters collection
+     * @return FilterComposite
      */
-    public function getDateRanger(): FilterDateRanger
+    public function addDateRange(): FilterComposite
     {
-        return $this->dateRanger;
+        $this->filters->put('dateRange', new FilterDateRange($this->model));
+
+        return $this;
     }
 
     /**
-     * @return FilterDateStricter
+     * Adds FilterDateRange to filters collection
+     * @return FilterComposite
      */
-    public function getDateStricter(): FilterDateStricter
+    public function addDateStrict(): FilterComposite
     {
-        return $this->dateStricter;
+        $this->filters->put('dateStrict', new FilterDateStrict($this->model));
+
+        return $this;
+    }
+
+    //fixme geters can throw exception if filter not set
+    /**
+     * Returns FilterSort from filters collection
+     * @return FilterSort
+     */
+    public function getSort(): FilterSort
+    {
+        return $this->filters->get('sort');
     }
 
     /**
-     * @return Collection
+     * Returns FilterCount from filters collection
+     * @return FilterCount
      */
-    public function getModeler(): Collection
+    public function getCount(): FilterCount
     {
-        return $this->modeler;
+        return $this->filters->get('count');
     }
 
-    //fixme make this single foreach?
+    /**
+     * Returns FilterRelation by it's name from filters collection
+     * @param string $relationName
+     * @return FilterRelation
+     */
+    public function getRelation(string $relationName): FilterRelation
+    {
+        return $this->filters->get('relation-' . $relationName);
+    }
+
+    /**
+     * Returns FilterDateRange from filters collection
+     * @return FilterDateRange
+     */
+    public function getDateRange(): FilterDateRange
+    {
+        return $this->filters->get('dateRange');
+    }
+
+    /**
+     * Returns FilterDateStrict from filters collection
+     * @return FilterDateStrict
+     */
+    public function getDateStrict(): FilterDateStrict
+    {
+        return $this->filters->get('dateStrict');
+    }
+
+    /**
+     * Handles all filters in filter collection
+     */
     public function handle()
     {
-        if ($this->sorter) {
-            $this->sorter->handle();
-        }
-        if ($this->counter) {
-            $this->counter->handle();
-        }
-
-        if ($this->dateRanger) {
-            $this->dateRanger->handle();
-        }
-
-        if ($this->dateStricter) {
-            $this->dateStricter->handle();
-        }
-
-        foreach ($this->modeler as $modeler) {
-            $modeler->handle();
+        foreach ($this->filters as $filter) {
+            $filter->handle();
         }
     }
 

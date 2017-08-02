@@ -1,37 +1,41 @@
 <?php namespace Vis\Articles\Filters;
 
 use Vis\Articles\Interfaces\FilterInterface;
-use Vis\Articles\Models\AbstractArticle;
+use Vis\Articles\Interfaces\FilterableArticleInterface;
 use Illuminate\Support\Facades\Input;
 
 abstract class AbstractFilter implements FilterInterface
 {
-    /** Defines articles model that will be used
-     * @var AbstractArticle
+    /**
+     * Defines articles model that will be used
+     * @var FilterableArticleInterface
      */
     protected $model;
 
-    /** Defines list of options for filter
+    /**
+     * Defines list of options for filter
      * @var mixed
      */
     protected $options;
 
-    /** Defines selected option for filter
+    /**
+     * Defines selected option for filter
      * @var mixed
      */
     protected $selected;
 
     /**
      * ArticleFilterHandler constructor. Defined as private to prevent initiating of object
-     * @param AbstractArticle $model
+     * @param FilterableArticleInterface $model
      * @param array $additionalParams
      */
-    public function __construct(AbstractArticle $model, ...$additionalParams)
+    public function __construct(FilterableArticleInterface $model, ...$additionalParams)
     {
         $this->model = $model;
     }
 
-    /** Returns options list for filter
+    /**
+     * Returns options list for filter
      * @return mixed
      */
     public function getOptions()
@@ -39,7 +43,8 @@ abstract class AbstractFilter implements FilterInterface
         return $this->options;
     }
 
-    /** Returns selected option for filter
+    /**
+     * Returns selected option for filter
      * @return mixed
      */
     public function getSelected()
@@ -47,7 +52,8 @@ abstract class AbstractFilter implements FilterInterface
         return $this->selected;
     }
 
-    /** Helper function to get value from array set in model
+    /**
+     * Helper function to get value from array set in model
      * @param string $inputKey
      * @param array $array
      * @param string $column
@@ -64,7 +70,8 @@ abstract class AbstractFilter implements FilterInterface
         return $array[$key]['value'];
     }
 
-    /** Helper function to get value from Input by key
+    /**
+     * Helper function to get value from Input by key
      * @param $key
      * @return mixed
      */
@@ -73,17 +80,20 @@ abstract class AbstractFilter implements FilterInterface
         return Input::get($key);
     }
 
-    /** Handles list of options for filter
+    /**
+     * Handles list of options for filter
      * @return string
      */
     abstract protected function handleOptions();
 
-    /** Handles selected option for filter
+    /**
+     * Handles selected option for filter
      * @return string
      */
     abstract protected function handleSelected();
 
-    /** Handles filters
+    /**
+     * Handles filters
      */
     public function handle()
     {
