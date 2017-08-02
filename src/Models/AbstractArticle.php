@@ -165,7 +165,7 @@ abstract class AbstractArticle extends BaseModel implements DateInterface
         return $query;
     }
 
-    /** Scope to filter articles by date field
+    /** Scope to filter articles by date field in range
      * @param $query
      * @param Carbon $dateFrom
      * @param Carbon $dateTo
@@ -175,4 +175,21 @@ abstract class AbstractArticle extends BaseModel implements DateInterface
     {
        return $query->whereBetween($this->getDateField(), [$dateFrom, $dateTo]);
     }
+
+    /** Scope to filter articles by date field in strict comparision
+     * @param $query
+     * @param array $date
+     * @return mixed
+     */
+    public function scopeDateStrict($query, array $date)
+    {
+        $date = implode("-", array_filter($date));
+
+        if ($date) {
+            return $query->where($this->getDateField(), 'like', $date . '%');
+        }
+
+        return $query;
+    }
+
 }

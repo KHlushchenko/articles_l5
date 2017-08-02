@@ -2,19 +2,8 @@
 
 use Vis\Articles\Models\AbstractArticle;
 
-//fixme find a better name
 final class FilterModeler extends AbstractFilter
 {
-    /** Defines a collection of related filter models
-     * @var Illuminate\Support\Collection
-     */
-    private $modelOptions;
-
-    /** Defines selected model filter
-     * @var object
-     */
-    private $modelSelected;
-
     /** Defines name of related filter model
      * @var string
      */
@@ -34,29 +23,13 @@ final class FilterModeler extends AbstractFilter
         $this->modelPage = $additionalParams[1];
     }
 
-    /** Returns filterOptions from model class
-     * @return mixed
-     */
-    public function getModelOptions()
-    {
-        return $this->modelOptions;
-    }
-
-    /** Returns modelSelected property
-     * @return mixed
-     */
-    public function getModelSelected()
-    {
-        return $this->modelSelected;
-    }
-
     /** Returns noFilterUrl
      * @return mixed
      */
     public function getNoFilterUrl()
     {
-        if($this->getModelSelected()){
-            return str_replace("/" . $this->getModelSelected()->getSlug(), "", $this->getModelSelected()->getUrl());
+        if ($this->getSelected()) {
+            return str_replace("/" . $this->getSelected()->getSlug(), "", $this->getSelected()->getUrl());
         }
 
         return url()->current();
@@ -65,11 +38,11 @@ final class FilterModeler extends AbstractFilter
     /** Handles modelOptions property
      * @return mixed
      */
-    private function handleModelOptions()
+    protected function handleOptions()
     {
-        //fixme optimzie this, add caching
+        //fixme optimize this, add caching
         $collection = collect();
-        $articles = $this->model::has($this->modelName)->with($this->modelName)->get();
+        $articles = $this->model->active()->has($this->modelName)->with($this->modelName)->get();
 
         foreach ($articles as $article) {
             $collection->push($article->filterModel);
@@ -84,21 +57,13 @@ final class FilterModeler extends AbstractFilter
     /** Handles modelSelected property
      * @return mixed
      */
-    private function handleModelSelected()
+    protected function handleSelected()
     {
-        $modelSelected = $this->getModelOptions()->first(function ($key, $value) {
+        $modelSelected = $this->getOptions()->first(function ($key, $value) {
             return $value->id === $this->modelPage->id;
         });
 
         return $modelSelected;
-    }
-
-    /** Handles filters
-     */
-    public function handle()
-    {
-        $this->modelOptions  = $this->handleModelOptions();
-        $this->modelSelected = $this->handleModelSelected();
     }
 
 }

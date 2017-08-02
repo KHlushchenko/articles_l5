@@ -4,79 +4,38 @@ use Carbon\Carbon;
 
 final class FilterDateRanger extends AbstractFilter
 {
-    /** Defines selected dateFrom filter
-     * @var Carbon
+    /** Handles list of options for filter
+     * @return mixed
      */
-    private $dateFromSelected;
-
-    /** Defines selected dateTo filter
-     * @var Carbon
-     */
-    private $dateToSelected;
-
-    /** Defines  minimal possible select date for model
-     * @var Carbon
-     */
-    private $dateFromOption;
-
-    /** Returns dateFrom property
-     * @return Carbon
-     */
-    public function getDateFromSelected(): Carbon
+    protected function handleOptions()
     {
-        return $this->dateFrom;
+        //fixme optimize this, add caching
+        $articles = $this->model->active()->get();
+
+        return [
+            'date-from' => $articles->min($this->model->getDateField()),
+            'date-to'   => $articles->max($this->model->getDateField()),
+        ];
     }
 
-    /** Returns dateTo property
-     * @return Carbon
-     */
-    public function getDateToSelected(): Carbon
-    {
-        return $this->dateTo;
-    }
-
-    /** Handles dateFrom property
+    /** Handles selected option for filter
      * @return string
      */
-    private function handleDateFromSelected()
+    protected function handleSelected()
     {
-        if ($dateFrom = $this->getFromInput('date-from')) {
-            return Carbon::parse($dateFrom);
+        $dateFrom = $this->getFromInput('date-from');
+        $dateTo   = $this->getFromInput('date-to');
+
+        $selected = [
+            'date-from' => $dateFrom ? Carbon::parse($dateFrom) : $this->getOptions()['date-from'],
+            'date-to'   => $dateTo   ? Carbon::parse($dateTo)   : $this->getOptions()['date-to']
+        ];
+
+        if ($selected['date-from'] > $selected['date-to']) {
+            array_reverse($selected);
         }
 
-        return Carbon::minValue();
+        return $selected;
     }
 
-    /** Handles dateTo property
-     * @return string
-     */
-    private function handleDateToSelected()
-    {
-        if ($dateTo = $this->getFromInput('date-to')) {
-            return Carbon::parse($dateTo);
-        }
-
-        return Carbon::maxValue();
-    }
-
-    /** Swaps dates if dateFrom is bigger than dateTo
-     */
-    private function checkDatesOrder()
-    {
-        if ($this->getDateFromSelected() > $this->getDateToSelected()) {
-            $tmp = $this->dateFrom;
-            $this->dateFromSelected = $this->dateTo;
-            $this->dateToSelected = $tmp;
-        }
-    }
-
-    /** Handles filters
-     */
-    public function handle()
-    {
-        $this->dateFromSelected = $this->handleDateFromSelected();
-        $this->dateToSelected = $this->handleDateToSelected();
-
-        $this->checkDatesOrder();
-    }
 }

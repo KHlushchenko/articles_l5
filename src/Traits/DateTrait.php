@@ -1,5 +1,6 @@
 <?php namespace Vis\Articles\Traits;
 
+//fixme update to FilterDates level
 trait DateTrait
 {
     /** Return year from given date field name

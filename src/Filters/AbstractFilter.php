@@ -11,6 +11,16 @@ abstract class AbstractFilter implements FilterInterface
      */
     protected $model;
 
+    /** Defines list of options for filter
+     * @var mixed
+     */
+    protected $options;
+
+    /** Defines selected option for filter
+     * @var mixed
+     */
+    protected $selected;
+
     /**
      * ArticleFilterHandler constructor. Defined as private to prevent initiating of object
      * @param AbstractArticle $model
@@ -19,6 +29,22 @@ abstract class AbstractFilter implements FilterInterface
     public function __construct(AbstractArticle $model, ...$additionalParams)
     {
         $this->model = $model;
+    }
+
+    /** Returns options list for filter
+     * @return mixed
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /** Returns selected option for filter
+     * @return mixed
+     */
+    public function getSelected()
+    {
+        return $this->selected;
     }
 
     /** Helper function to get value from array set in model
@@ -46,5 +72,23 @@ abstract class AbstractFilter implements FilterInterface
     {
         return Input::get($key);
     }
-}
 
+    /** Handles list of options for filter
+     * @return string
+     */
+    abstract protected function handleOptions();
+
+    /** Handles selected option for filter
+     * @return string
+     */
+    abstract protected function handleSelected();
+
+    /** Handles filters
+     */
+    public function handle()
+    {
+        $this->options  = $this->handleOptions();
+        $this->selected = $this->handleSelected();
+    }
+
+}

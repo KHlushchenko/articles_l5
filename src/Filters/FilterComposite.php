@@ -30,6 +30,11 @@ final class FilterComposite
      */
     private $dateRanger;
 
+    /** Defines dateRanger filter object
+     * @var FilterDateStricter
+     */
+    private $dateStricter;
+
     /**
      * ArticleFilterComposite constructor. Defined as private to prevent initiating of object
      * @param AbstractArticle $model
@@ -68,6 +73,13 @@ final class FilterComposite
         return $this;
     }
 
+    public function addDateStricter()
+    {
+        $this->dateStricter = new FilterDateStricter($this->model);
+
+        return $this;
+    }
+
     /**
      * @return FilterSorter
      */
@@ -93,6 +105,14 @@ final class FilterComposite
     }
 
     /**
+     * @return FilterDateStricter
+     */
+    public function getDateStricter(): FilterDateStricter
+    {
+        return $this->dateStricter;
+    }
+
+    /**
      * @return Collection
      */
     public function getModeler(): Collection
@@ -112,6 +132,10 @@ final class FilterComposite
 
         if ($this->dateRanger) {
             $this->dateRanger->handle();
+        }
+
+        if ($this->dateStricter) {
+            $this->dateStricter->handle();
         }
 
         foreach ($this->modeler as $modeler) {

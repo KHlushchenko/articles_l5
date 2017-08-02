@@ -2,39 +2,20 @@
 
 final class FilterSorter extends AbstractFilter
 {
-    /** Defines selected order filter
-     * @var string
+    /** Handles list of options for filter
+     * @return array
      */
-    private $sortSelected;
-
-    /** Returns sortOptions property from model class
-     * @return mixed
-     */
-    public function getSortOptions(): array
+    protected function handleOptions()
     {
         return $this->model->getSortOptions();
     }
 
-    /** Returns sortSelected property
-     * @return mixed
-     */
-    public function getSortSelected(): string
-    {
-        return $this->sortSelected;
-    }
-
-    /** Handles sortSelected property
+    /** Handles selected option for filter
      * @return string
      */
-    private function handleSortSelected()
+    protected function handleSelected()
     {
-        return $this->getFromArray('sort', $this->getSortOptions()) ?: $this->model->getSortOrder();
+        return $this->getFromArray('sort', $this->getOptions()) ?: $this->model->getSortOrder();
     }
 
-    /** Handles filters
-     */
-    public function handle()
-    {
-        $this->sortSelected = $this->handleSortSelected();
-    }
 }
