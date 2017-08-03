@@ -63,12 +63,45 @@ final class FilterComposite
     }
 
     /**
-     * Adds FilterDateRange to filters collection
+     * Adds FilterDateMonth to filters collection
      * @return FilterComposite
      */
-    public function addDateRange(): FilterComposite
+    public function addDateDay(): FilterComposite
     {
-        $this->filters->put('dateRange', new FilterDateRange($this->model));
+        $this->filters->put('dateDay', new FilterDateDay($this->model));
+
+        return $this;
+    }
+
+    /**
+     * Adds FilterDateMonth to filters collection
+     * @return FilterComposite
+     */
+    public function addDateMonth(): FilterComposite
+    {
+        $this->filters->put('dateMonth', new FilterDateMonth($this->model));
+
+        return $this;
+    }
+
+    /**
+     * Adds FilterDateYear to filters collection
+     * @return FilterComposite
+     */
+    public function addDateYear(): FilterComposite
+    {
+        $this->filters->put('dateYear', new FilterDateYear($this->model));
+
+        return $this;
+    }
+
+    /**
+     * Adds FilterDateStrict to filters collection
+     * @return FilterComposite
+     */
+    public function addDateStrict(): FilterComposite
+    {
+        $this->filters->put('dateStrict', new FilterDateStrict($this->model));
 
         return $this;
     }
@@ -77,9 +110,9 @@ final class FilterComposite
      * Adds FilterDateRange to filters collection
      * @return FilterComposite
      */
-    public function addDateStrict(): FilterComposite
+    public function addDateRange(): FilterComposite
     {
-        $this->filters->put('dateStrict', new FilterDateStrict($this->model));
+        $this->filters->put('dateRange', new FilterDateRange($this->model));
 
         return $this;
     }
@@ -114,12 +147,30 @@ final class FilterComposite
     }
 
     /**
-     * Returns FilterDateRange from filters collection
-     * @return FilterDateRange
+     * Returns FilterDateDay from filters collection
+     * @return FilterDateDay
      */
-    public function getDateRange(): FilterDateRange
+    public function getDateDay(): FilterDateDay
     {
-        return $this->filters->get('dateRange');
+        return $this->filters->get('dateDay');
+    }
+
+    /**
+     * Returns FilterDateMonth from filters collection
+     * @return FilterDateMonth
+     */
+    public function getDateMonth(): FilterDateMonth
+    {
+        return $this->filters->get('dateMonth');
+    }
+
+    /**
+     * Returns FilterDateYear from filters collection
+     * @return FilterDateYear
+     */
+    public function getDateYear(): FilterDateYear
+    {
+        return $this->filters->get('dateYear');
     }
 
     /**
@@ -129,6 +180,15 @@ final class FilterComposite
     public function getDateStrict(): FilterDateStrict
     {
         return $this->filters->get('dateStrict');
+    }
+
+    /**
+     * Returns FilterDateRange from filters collection
+     * @return FilterDateRange
+     */
+    public function getDateRange(): FilterDateRange
+    {
+        return $this->filters->get('dateRange');
     }
 
     /**

@@ -71,15 +71,48 @@ abstract class AbstractFilterableArticle extends AbstractArticle implements Filt
     }
 
     /**
-     * Scope to filter articles by date field in range
+     * Scope to filter articles by day of date field
      * @param $query
-     * @param Carbon $dateFrom
-     * @param Carbon $dateTo
+     * @param int $day
      * @return mixed
      */
-    public function scopeFilterDateRange($query, Carbon $dateFrom, Carbon $dateTo)
+    public function scopeFilterDateDay($query, int $day = 0)
     {
-       return $query->whereBetween($this->getDateField(), [$dateFrom, $dateTo]);
+        if ($day) {
+            $query->whereDay($this->getDateField(), '=', $day);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Scope to filter articles by month of date field
+     * @param $query
+     * @param int $month
+     * @return mixed
+     */
+    public function scopeFilterDateMonth($query, int $month = 0)
+    {
+        if ($month) {
+            $query->whereMonth($this->getDateField(), '=', $month);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Scope to filter articles by year of date field
+     * @param $query
+     * @param int $year
+     * @return mixed
+     */
+    public function scopeFilterDateYear($query, int $year = 0)
+    {
+        if ($year) {
+            $query->whereYear($this->getDateField(), '=', $year);
+        }
+
+        return $query;
     }
 
     /**
@@ -90,19 +123,21 @@ abstract class AbstractFilterableArticle extends AbstractArticle implements Filt
      * @param int $day
      * @return mixed
      */
-    public function scopeFilterDateStrict($query, int $year  = null, int $month  = null, int $day = null)
+    public function scopeFilterDateStrict($query, int $year = 0, int $month = 0, int $day = 0)
     {
-        if ($year) {
-            $query->whereYear($this->getDateField(), '=', $year);
-            if ($month) {
-                $query->whereMonth($this->getDateField(), '=', $month);
-                if ($day) {
-                    $query->whereDay($this->getDateField(), '=', $day);
-                }
-            }
-        }
+        return $query->filterDateDay($day)->filterDateMonth($month)->filterDateYear($year);
+    }
 
-        return $query;
+    /**
+     * Scope to filter articles by date field in range
+     * @param $query
+     * @param Carbon $dateFrom
+     * @param Carbon $dateTo
+     * @return mixed
+     */
+    public function scopeFilterDateRange($query, Carbon $dateFrom, Carbon $dateTo)
+    {
+        return $query->whereBetween($this->getDateField(), [$dateFrom, $dateTo]);
     }
 
 }

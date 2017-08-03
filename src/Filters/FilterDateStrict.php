@@ -1,52 +1,65 @@
 <?php namespace Vis\Articles\Filters;
 
-use Carbon\Carbon;
+use Vis\Articles\Interfaces\FilterableArticleInterface;
 
 final class FilterDateStrict extends AbstractFilter
 {
     /**
-     * Handles list of options for filter
-     * @return mixed
+     * Defines year filter
+     * @var FilterDateYear
      */
+    private $yearFilter;
+
+    /**
+     * Defines month filter
+     * @var FilterDateMonth
+     */
+    private $monthFilter;
+
+    /**
+     * Defines day filter
+     * @var FilterDateDay
+     */
+    private $dayFilter;
+
     //fixme refactor this?
-    protected function handleOptions()
+    /**
+     * FilterDateStrict constructor. Sets year, month and day filters
+     * @param FilterableArticleInterface $model
+     * @param array ...$additionalParams
+     */
+    public function __construct(FilterableArticleInterface $model, ...$additionalParams)
     {
-        $years = [];
-        $month = [];
+        parent::__construct($model, ...$additionalParams);
 
-        //fixme optimize this, add caching
-        $articles = $this->model->active()->get();
+        $this->yearFilter  = (new FilterDateYear($this->model))->handle();
+        $this->monthFilter = (new FilterDateMonth($this->model))->handle();
+        $this->dayFilter   = (new FilterDateDay($this->model))->handle();
+    }
 
-        $yearsAll = $articles->pluck($this->model->getDateField());
-
-        foreach ($yearsAll as $year) {
-            $value = $year->format('Y');
-            $years[$value] = ['name' => $value, 'description' => $value, 'value' => $value];
-        }
-
-        for ($i = 1; $i <= 12; $i++) {
-            $description = Carbon::createFromFormat('!m', $i)->formatLocalized('%B');
-            $month[] = ['name' => $i, 'description' => $description, 'value' => $i];
-        }
-
-
+    /**
+     * Handles list of options for filter
+     * @return array
+     */
+    protected function handleOptions(): array
+    {
         return [
-            'year'  => array_values($years),
-            'month' => $month
+            'year'  => $this->yearFilter->getOptions(),
+            'month' => $this->monthFilter->getOptions(),
+            'day'   => $this->dayFilter->getOptions()
         ];
     }
 
     /**
      * Handles selected option for filter
-     * @return string
+     * @return array
      */
-    protected function handleSelected()
+    protected function handleSelected(): array
     {
         return [
-            'year'  => $this->getFromArray('year', $this->getOptions()['year']) ?: null,
-            'month' => $this->getFromArray('month', $this->getOptions()['month']) ?: null,
-            //fixme add more reliant day filter
-            'day'  => (int) $this->getFromInput('day')
+            'year'  => $this->yearFilter->getSelected(),
+            'month' => $this->monthFilter->getSelected(),
+            'day'   => $this->dayFilter->getSelected()
         ];
     }
 

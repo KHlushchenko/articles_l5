@@ -302,17 +302,37 @@ class PackageFilterableArticle extends AbstractFilterableArticle
     public function scopeFilterRelation($query, $relationName, $relationSelected);
 ```
 
+Метод-фильтр статей по дню</br>
+Значение: целое число $year, целое число $month, целое число $day
+```php
+    public function scopeFilterDateDay($query, int $day = 0);
+```
+
+Метод-фильтр статей по месяцу</br>
+Значение: целое число $year, целое число $month, целое число $day
+```php
+    public function scopeFilterDateMonth($query, int $month = 0);
+```
+
+Метод-фильтр статей по году</br>
+Значение: целое число $year, целое число $month, целое число $day
+```php
+    public function scopeFilterDateYear($query, int $year = 0);
+```
+ 
+Метод-фильтр статей по точной дате Y-M-D</br>
+Значение: целое число $year, целое число $month, целое число $day
+```php
+    public function scopeFilterDateStrict($query, int $year  = null, int $month  = null, int $day = null);
+```
+
 Метод-фильтр по промежутку дат</br>
 Значение: Объект Carbon\Carbon $dateFrom, Объект Carbon\Carbon $dateTo
 ```php
     public function scopeFilterDateRange($query, Carbon $dateFrom, Carbon $dateTo);
 ```
 
-Метод-фильтр статей по точной дате</br>
-Значение: целое число $year, целое число $month, целое число $day
-```php
-    public function scopeFilterDateStrict($query, int $year  = null, int $month  = null, int $day = null);
-```
+
 
 2. Создать контроллер, который наследует Vis\Articles\Controllers\AbstractArticleController. </br>
 Определить в нём методы ShowSingle, ShowCatalog и ShowSubCatalog, если необходима фильтрация статей по внешней моделе.
@@ -333,6 +353,9 @@ class PackageFilteredArticlesController extends AbstractFilterableArticleControl
             ->addSort()
             ->addRelation('filterModel', $page)
             ->addDateRange()
+            ->addDateDay()
+            ->addDateMonth()
+            ->addDateYear()
             ->addDateStrict()
             ->handle();
 
@@ -340,12 +363,18 @@ class PackageFilteredArticlesController extends AbstractFilterableArticleControl
         $perPage    = $filters->getCount()->getSelected();
         $filter     = $filters->getRelation('filterModel')->getSelected();
         $dateRange  = $filters->getDateRange()->getSelected();
-        $date       = $filters->getDateStrict()->getSelected();
+        $dateDay    = $filters->getDateDay()->getSelected();
+        $dateMonth  = $filters->getDateMonth()->getSelected();
+        $dateYear   = $filters->getDateYear()->getSelected();
+        $dateStrict = $filters->getDateStrict()->getSelected();
 
         $articles = $this->model->active()->with('filterModel')
             ->filterRelation('filterModel', $filter)
             ->filterDateRange($dateRange['date-from'], $dateRange['date-to'])
-            ->filterDateStrict($date['year'], $date['month'], $date['day'])
+            ->filterDateDay($dateDay)
+            ->filterDateMonth($dateMonth)
+            ->filterDateYear($dateYear)
+            ->filterDateStrict($dateStrict['year'], $dateStrict['month'], $dateStrict['day'])
             ->filterCustomOrder($sortOrder)
             ->paginate($perPage);
 

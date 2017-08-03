@@ -99,6 +99,8 @@ abstract class AbstractFilter implements FilterInterface
     {
         $this->options  = $this->handleOptions();
         $this->selected = $this->handleSelected();
+
+        return $this;
     }
 
 }

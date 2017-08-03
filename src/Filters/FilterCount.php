@@ -6,7 +6,7 @@ final class FilterCount extends AbstractFilter
      * Handles list of options for filter
      * @return array
      */
-    protected function handleOptions()
+    protected function handleOptions(): array
     {
         return $this->model->getCountOptions();
     }
@@ -15,7 +15,7 @@ final class FilterCount extends AbstractFilter
      * Handles selected option for filter
      * @return string
      */
-    protected function handleSelected()
+    protected function handleSelected(): string
     {
         return $this->getFromArray('count', $this->getOptions()) ?: $this->model->getPerPage();
     }

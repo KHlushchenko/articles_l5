@@ -6,9 +6,9 @@ final class FilterDateRange extends AbstractFilter
 {
     /**
      * Handles list of options for filter
-     * @return mixed
+     * @return array
      */
-    protected function handleOptions()
+    protected function handleOptions(): array
     {
         //fixme optimize this, add caching
         $articles = $this->model->active()->get();
@@ -21,9 +21,9 @@ final class FilterDateRange extends AbstractFilter
 
     /**
      * Handles selected option for filter
-     * @return string
+     * @return array
      */
-    protected function handleSelected()
+    protected function handleSelected():array
     {
         $dateFrom = $this->getFromInput('date-from');
         $dateTo   = $this->getFromInput('date-to');

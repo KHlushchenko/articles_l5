@@ -32,13 +32,28 @@ interface FilterableArticleInterface extends ArticleInterface
     public function scopeFilterRelation($query, $relationName, $relationSelected);
 
     /**
-     * Scope to filter articles by date field in range
+     * Scope to filter articles by day of date field
      * @param $query
-     * @param Carbon $dateFrom
-     * @param Carbon $dateTo
+     * @param int $day
      * @return mixed
      */
-    public function scopeFilterDateRange($query, Carbon $dateFrom, Carbon $dateTo);
+    public function scopeFilterDateDay($query, int $day = 0);
+
+    /**
+     * Scope to filter articles by month of date field
+     * @param $query
+     * @param int $month
+     * @return mixed
+     */
+    public function scopeFilterDateMonth($query, int $month = 0);
+
+    /**
+     * Scope to filter articles by year of date field
+     * @param $query
+     * @param int $year
+     * @return mixed
+     */
+    public function scopeFilterDateYear($query, int $year = 0);
 
     /**
      * Scope to filter articles by date field in strict comparision
@@ -49,4 +64,13 @@ interface FilterableArticleInterface extends ArticleInterface
      * @return mixed
      */
     public function scopeFilterDateStrict($query, int $year  = null, int $month  = null, int $day = null);
+
+    /**
+     * Scope to filter articles by date field in range
+     * @param $query
+     * @param Carbon $dateFrom
+     * @param Carbon $dateTo
+     * @return mixed
+     */
+    public function scopeFilterDateRange($query, Carbon $dateFrom, Carbon $dateTo);
 }
