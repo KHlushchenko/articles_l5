@@ -54,7 +54,7 @@ final class FilterRelation extends AbstractFilter
         $articles = $this->model->active()->has($this->relationName)->with($this->relationName)->get();
 
         foreach ($articles as $article) {
-            $collection->push($article->filterModel);
+            $collection->push($article->{$this->relationName});
         }
 
         return $collection->unique();
