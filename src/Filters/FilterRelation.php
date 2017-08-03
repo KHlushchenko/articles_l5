@@ -57,7 +57,7 @@ final class FilterRelation extends AbstractFilter
             $collection->push($article->{$this->relationName});
         }
 
-        return $collection->unique();
+        return $collection->uniqueStrict();
     }
 
     /**
@@ -67,7 +67,7 @@ final class FilterRelation extends AbstractFilter
     protected function handleSelected()
     {
         //fixme think about passing null ?
-        return $this->getOptions()->first(function ($key, $value) {
+        return $this->getOptions()->first(function ($value, $key) {
             return $value->id === $this->relationSelected->id;
         });
     }
