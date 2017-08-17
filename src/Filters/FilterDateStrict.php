@@ -32,9 +32,9 @@ final class FilterDateStrict extends AbstractFilter
     {
         parent::__construct($model, ...$additionalParams);
 
-        $this->yearFilter  = (new FilterDateYear($this->model))->handle();
-        $this->monthFilter = (new FilterDateMonth($this->model))->handle();
-        $this->dayFilter   = (new FilterDateDay($this->model))->handle();
+        $this->yearFilter  = new FilterDateYear($this->model);
+        $this->monthFilter = new FilterDateMonth($this->model);
+        $this->dayFilter   = new FilterDateDay($this->model);
     }
 
     /**
@@ -43,6 +43,10 @@ final class FilterDateStrict extends AbstractFilter
      */
     protected function handleOptions(): array
     {
+        $this->yearFilter->handle();
+        $this->monthFilter->handle();
+        $this->dayFilter->handle();
+
         return [
             'year'  => $this->yearFilter->getOptions(),
             'month' => $this->monthFilter->getOptions(),
