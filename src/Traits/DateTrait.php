@@ -1,8 +1,33 @@
 <?php namespace Vis\Articles\Traits;
 
-//fixme use Carbon instead of date function?
+use \Carbon\Carbon;
+
 trait DateTrait
 {
+    /** Object field that will be parsed by Carbon
+     * @var
+     */
+    private $carbonField;
+
+    /** Carbon parsed date
+     * @var
+     */
+    private $carbonDate;
+
+    /** Carbon parser
+     * @param string $field
+     * @return Carbon
+     */
+    public function parseCarbon(string $field = 'created_at'): Carbon
+    {
+        if ($this->carbonField != $field) {
+            $this->carbonField = $field;
+            $this->carbonDate = Carbon::parse($this->carbonField);
+        }
+
+        return $this->carbonDate;
+    }
+
     /**
      * Return year from given date field name
      * @param string $field
@@ -10,7 +35,7 @@ trait DateTrait
      */
     public function getYear(string $field = 'created_at'): string
     {
-        return date("Y", strtotime($this->$field));
+        return $this->parseCarbon($this->$field)->format("Y");
     }
 
     /**
@@ -20,7 +45,7 @@ trait DateTrait
      */
     public function getMonth(string $field = 'created_at'): string
     {
-        return date("m", strtotime($this->$field));
+        return $this->parseCarbon($this->$field)->format("m");
     }
 
     /**
@@ -30,7 +55,7 @@ trait DateTrait
      */
     public function getNameMonth(string $field = 'created_at'): string
     {
-        return date("F", strtotime($this->$field));
+        return $this->parseCarbon($this->$field)->formatLocalized('%B');
     }
 
     /**
@@ -40,7 +65,7 @@ trait DateTrait
      */
     public function getShortNameMonth(string $field = 'created_at'): string
     {
-        return date("m", strtotime($this->$field));
+        return $this->parseCarbon($this->$field)->formatLocalized('%b');
     }
 
     /**
@@ -50,7 +75,27 @@ trait DateTrait
      */
     public function getDay(string $field = 'created_at'): string
     {
-        return date("d", strtotime($this->$field));
+        return $this->parseCarbon($this->$field)->format("d");
+    }
+
+    /**
+     * Return day from given date field name
+     * @param string $field
+     * @return string
+     */
+    public function getDayName(string $field = 'created_at'): string
+    {
+        return $this->parseCarbon($this->$field)->formatLocalized('%A');
+    }
+
+    /**
+     * Return day from given date field name
+     * @param string $field
+     * @return string
+     */
+    public function getDayNameShort(string $field = 'created_at'): string
+    {
+        return $this->parseCarbon($this->$field)->formatLocalized('%a');
     }
 
     /**
@@ -60,7 +105,7 @@ trait DateTrait
      */
     public function getHour(string $field = 'created_at'): string
     {
-        return date("H", strtotime($this->$field));
+        return $this->parseCarbon($this->$field)->format("h");
     }
 
     /**
@@ -70,7 +115,7 @@ trait DateTrait
      */
     public function getMinute(string $field = 'created_at'): string
     {
-        return date("i", strtotime($this->$field));
+        return $this->parseCarbon($this->$field)->format("i");
     }
 
     /**
@@ -80,7 +125,7 @@ trait DateTrait
      */
     public function getSecond(string $field = 'created_at'): string
     {
-        return date("s", strtotime($this->$field));
+        return $this->parseCarbon($this->$field)->format("s");
     }
 
     /**
@@ -136,7 +181,7 @@ trait DateTrait
      */
     public function getDateTime(string $field = 'created_at', string $dateSeparator = ".", $timeSeparator = ":"): string
     {
-        return $this->getTime($field, $dateSeparator) . " " . $this->getDate($field, $timeSeparator);
+        return $this->getTime($field, $timeSeparator) . " " . $this->getDate($field, $dateSeparator);
     }
 
     /**
@@ -148,6 +193,7 @@ trait DateTrait
      */
     public function getDateTimeFull(string $field = 'created_at', string $dateSeparator = ".", $timeSeparator = ":"): string
     {
-        return $this->getTimeFull($field, $dateSeparator) . " " . $this->getDate($field, $timeSeparator);
+        return $this->getTimeFull($field, $timeSeparator) . " " . $this->getDate($field, $dateSeparator);
     }
+
 }
