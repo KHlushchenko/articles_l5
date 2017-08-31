@@ -2,7 +2,10 @@
 
 use Vis\Articles\Interfaces\FilterInterface;
 use Vis\Articles\Interfaces\FilterableArticleInterface;
+
+use Illuminate\Support\Collection as Collection;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Cache;
 
 abstract class AbstractFilter implements FilterInterface
 {
@@ -78,6 +81,18 @@ abstract class AbstractFilter implements FilterInterface
     protected function getFromInput($key)
     {
         return Input::get($key);
+    }
+
+    /** Gets all active articles for model
+     * @return Collection
+     */
+    protected function getModelArticles(): Collection
+    {
+        $articles = Cache::tags($this->model->getTable())->rememberForever($this->model->getTable() . "_active_articles", function () {
+            return $this->model->active()->get();
+        });
+
+        return $articles;
     }
 
     /**

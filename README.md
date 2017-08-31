@@ -378,9 +378,8 @@ class PackageFilteredArticlesController extends AbstractFilterableArticleControl
             ->filterCustomOrder($sortOrder)
             ->paginate($perPage);
 
-        if ($articles->count()) {
-            $articles->load($this->model->getRelationsInCatalog());
-        }
+        
+        $articles->load($this->model->getRelationsInCatalog());
 
         return view("pages." . $this->model->getViewFolder() . ".catalog", compact('page', 'articles', 'filters'));
     }
@@ -458,7 +457,10 @@ class PackageFilteredArticlesController extends AbstractFilterableArticleControl
 ```
 
 Примечание. Для корректной работы у внешней модели-фильтра необходимо наличие поля slug. </br>
-Для его автоматического заполнения в  definition`е этой модели можно определить предоставляемый handler Vis\Articles\Handlers\SlugHandler.
+Для его автоматического заполнения в  definition`е этой модели можно определить 
+```php
+handler => 'Vis\Builder\Helpers\SlugHandler' 
+```
 
 5. Определить именной роут, по которому будут доступны статьи
 ```php

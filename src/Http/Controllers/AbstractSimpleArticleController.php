@@ -30,12 +30,8 @@ abstract class AbstractSimpleArticleController extends AbstractArticleController
      */
     public function showArticle($slug, $id)
     {
-        $page = $this->model->where('id', $id)->active()->first();
-
-        if (!$page) {
-            abort(404);
-        }
-
+        $page = $this->model->where('id', $id)->active()->firstOrFail();
+        
         if ($page->getSlug() != $slug) {
             return redirect($page->getUrl(), 302);
         }

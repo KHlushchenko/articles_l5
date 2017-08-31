@@ -49,9 +49,10 @@ final class FilterRelation extends AbstractFilter
      */
     protected function handleOptions()
     {
-        //fixme optimize this, add caching
         $collection = collect();
-        $articles = $this->model->active()->has($this->relationName)->with($this->relationName)->get();
+
+        $articles = $this->getModelArticles();
+        $articles->load($this->relationName);
 
         foreach ($articles as $article) {
             $collection->push($article->{$this->relationName});

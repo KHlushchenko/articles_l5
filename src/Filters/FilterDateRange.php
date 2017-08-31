@@ -10,8 +10,7 @@ final class FilterDateRange extends AbstractFilter
      */
     protected function handleOptions(): array
     {
-        //fixme optimize this, add caching
-        $articles = $this->model->active()->get();
+        $articles = $this->getModelArticles();
 
         return [
             'date-from' => $articles->min($this->model->getDateField()),

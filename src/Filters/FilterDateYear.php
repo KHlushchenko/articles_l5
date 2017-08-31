@@ -11,8 +11,7 @@ final class FilterDateYear extends AbstractFilter
     {
         $years = [];
 
-        //fixme optimize this, add caching
-        $articles = $this->model->active()->get();
+        $articles = $this->getModelArticles();
 
         $yearsAll = $articles->pluck($this->model->getDateField());
 
