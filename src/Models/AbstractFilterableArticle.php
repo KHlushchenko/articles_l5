@@ -62,13 +62,13 @@ abstract class AbstractFilterableArticle extends AbstractArticle implements Filt
      */
     public function scopeFilterRelation($query, $relationName, $relationSelected)
     {
-        if (!$relationSelected) {
-            return $query;
+        if ($relationSelected) {
+            $query->whereHas($relationName, function ($subQuery) use ($relationSelected) {
+                $subQuery->where("id", $relationSelected->id);
+            });
         }
 
-        return $query->whereHas($relationName, function ($subQuery) use ($relationSelected) {
-            $subQuery->where("id", $relationSelected->id);
-        });
+        return $query;
     }
 
     /**
