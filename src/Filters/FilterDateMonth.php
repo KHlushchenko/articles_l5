@@ -8,7 +8,6 @@ final class FilterDateMonth extends AbstractFilter
      * Handles list of options for filter
      * @return array
      */
-    //fixme refactor this?
     protected function handleOptions(): array
     {
         $month = [];

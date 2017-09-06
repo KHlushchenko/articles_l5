@@ -1,5 +1,7 @@
 <?php namespace Vis\Articles\Filters;
 
+use Illuminate\Support\Facades\Cache;
+
 use Vis\Articles\Interfaces\FilterableArticleInterface;
 
 final class FilterRelation extends AbstractFilter
@@ -23,11 +25,9 @@ final class FilterRelation extends AbstractFilter
      */
     public function __construct(FilterableArticleInterface $model, ...$additionalParams)
     {
-        parent::__construct($model, $additionalParams);
+        parent::__construct($model);
 
-        //fixme this array access?
-        $this->relationName = $additionalParams[0];
-        $this->relationSelected = $additionalParams[1];
+        list($this->relationName, $this->relationSelected) = $additionalParams;
     }
 
     /**
@@ -51,14 +51,17 @@ final class FilterRelation extends AbstractFilter
     {
         $collection = collect();
 
-        $articles = $this->getModelArticles();
-        $articles->load($this->relationName);
+        $articles = Cache::tags($this->model->getTable())->rememberForever($this->model->getTable() . "_active_articles_with_".$this->relationName, function () {
+            $articles = $this->getModelArticles();
+            $articles->load($this->relationName);
+            return $articles;
+        });
 
         foreach ($articles as $article) {
             $collection->push($article->{$this->relationName});
         }
 
-        return $collection->uniqueStrict();
+        return $collection->unique();
     }
 
     /**
@@ -67,7 +70,10 @@ final class FilterRelation extends AbstractFilter
      */
     protected function handleSelected()
     {
-        //fixme think about passing null ?
+        if(!$this->relationSelected){
+            return null;
+        }
+
         return $this->getOptions()->first(function ($value, $key) {
             return $value->id === $this->relationSelected->id;
         });

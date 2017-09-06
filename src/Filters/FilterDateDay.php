@@ -6,7 +6,6 @@ final class FilterDateDay extends AbstractFilter
      * Handles list of options for filter
      * @return mixed
      */
-    //fixme refactor this?
     protected function handleOptions(): array
     {
         return [];

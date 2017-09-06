@@ -22,15 +22,13 @@ final class FilterDateStrict extends AbstractFilter
      */
     private $dayFilter;
 
-    //fixme refactor this?
     /**
      * FilterDateStrict constructor. Sets year, month and day filters
      * @param FilterableArticleInterface $model
-     * @param array ...$additionalParams
      */
-    public function __construct(FilterableArticleInterface $model, ...$additionalParams)
+    public function __construct(FilterableArticleInterface $model)
     {
-        parent::__construct($model, ...$additionalParams);
+        parent::__construct($model);
 
         $this->yearFilter  = new FilterDateYear($this->model);
         $this->monthFilter = new FilterDateMonth($this->model);

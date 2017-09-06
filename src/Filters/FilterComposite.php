@@ -117,7 +117,6 @@ final class FilterComposite
         return $this;
     }
 
-    //fixme geters can throw exception if filter not set
     /**
      * Returns FilterSort from filters collection
      * @return FilterSort

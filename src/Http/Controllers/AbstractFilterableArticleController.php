@@ -17,7 +17,6 @@ abstract class AbstractFilterableArticleController extends AbstractArticleContro
     {
         parent::__construct();
 
-        //fixme this notification
         $this->filter = new FilterComposite($this->model);
     }
 
