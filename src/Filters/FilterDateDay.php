@@ -1,4 +1,5 @@
-<?php namespace Vis\Articles\Filters;
+<?php
+namespace Vis\Articles\Filters;
 
 final class FilterDateDay extends AbstractFilter
 {

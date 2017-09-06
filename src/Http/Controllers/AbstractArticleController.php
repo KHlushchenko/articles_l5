@@ -1,4 +1,5 @@
-<?php namespace Vis\Articles\Controllers;
+<?php
+namespace Vis\Articles\Controllers;
 
 use Vis\Articles\Interfaces\ArticleInterface;
 use Vis\Builder\TreeController;

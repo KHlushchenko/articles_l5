@@ -1,4 +1,5 @@
-<?php namespace Vis\Articles\Models;
+<?php
+namespace Vis\Articles\Models;
 
 use \BaseModel;
 use \Setting;

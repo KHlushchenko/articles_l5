@@ -1,4 +1,5 @@
-<?php namespace Vis\Articles\Traits;
+<?php
+namespace Vis\Articles\Traits;
 
 use \Carbon\Carbon;
 

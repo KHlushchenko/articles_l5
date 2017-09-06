@@ -1,4 +1,5 @@
-<?php namespace Vis\Articles\Filters;
+<?php
+namespace Vis\Articles\Filters;
 
 use Illuminate\Support\Facades\Cache;
 

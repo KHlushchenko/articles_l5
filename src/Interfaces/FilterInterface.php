@@ -1,4 +1,5 @@
-<?php namespace Vis\Articles\Interfaces;
+<?php
+namespace Vis\Articles\Interfaces;
 
 interface FilterInterface
 {

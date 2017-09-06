@@ -1,4 +1,5 @@
-<?php namespace Vis\Articles\Controllers;
+<?php
+namespace Vis\Articles\Controllers;
 
 abstract class AbstractSimpleArticleController extends AbstractArticleController
 {
