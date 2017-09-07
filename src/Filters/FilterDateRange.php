@@ -5,6 +5,24 @@ use Carbon\Carbon;
 
 final class FilterDateRange extends AbstractFilter
 {
+    /** Gets valid Carbon object from any input value
+     * @param string $field
+     * @return Carbon
+     */
+    private function getValidDate(string $field = 'date-from'): Carbon
+    {
+        $input = $this->getFromInput($field);
+
+        if ($input && $timeStamp = strtotime($input)) {
+            $date = Carbon::createFromTimestamp($timeStamp);
+            if ($date > $this->getOptions()['date-from'] && $date < $this->getOptions()['date-to']) {
+                return $date;
+            }
+        }
+
+        return $this->getOptions()[$field];
+    }
+
     /**
      * Handles list of options for filter
      * @return array
@@ -23,21 +41,15 @@ final class FilterDateRange extends AbstractFilter
      * Handles selected option for filter
      * @return array
      */
-    protected function handleSelected():array
+    protected function handleSelected(): array
     {
-        $dateFrom = $this->getFromInput('date-from');
-        $dateTo   = $this->getFromInput('date-to');
+        $dateFrom = $this->getValidDate('date-from');
+        $dateTo   = $this->getValidDate('date-to');
 
-        $selected = [
-            'date-from' => $dateFrom ? Carbon::parse($dateFrom) : $this->getOptions()['date-from'],
-            'date-to'   => $dateTo   ? Carbon::parse($dateTo)   : $this->getOptions()['date-to']
+        return [
+            'date-from' => $dateFrom < $dateTo ? $dateFrom : $dateTo ,
+            'date-to'   => $dateFrom < $dateTo ? $dateTo   : $dateFrom,
         ];
-
-        if ($selected['date-from'] > $selected['date-to']) {
-            array_reverse($selected);
-        }
-
-        return $selected;
     }
 
 }
