@@ -20,6 +20,12 @@ final class FilterRelation extends AbstractFilter
     private $relationSelected;
 
     /**
+     * Defines if related entries should be loaded as options
+     * @var bool
+     */
+    private $relationLoadAll;
+
+    /**
      * FilterRelation constructor. Accepts model and additional params: relationName and relationSelected
      * @param FilterableArticleInterface $model
      * @param array ...$additionalParams
@@ -29,28 +35,30 @@ final class FilterRelation extends AbstractFilter
         parent::__construct($model);
 
         list($this->relationName, $this->relationSelected) = $additionalParams;
+
+        $this->relationLoadAll = (bool)($additionalParams[2] ?? false);
     }
 
     /**
-     * Returns noFilterUrl
-     * @return mixed
+     * Gets all possible filters options
      */
-    public function getNoFilterUrl()
+    private function getAllOptions()
     {
-        if ($this->getSelected()) {
-            return str_replace("/" . $this->getSelected()->getSlug(), "", $this->getSelected()->getUrl());
-        }
+        $relatedClass = $this->model->{$this->relationName}()->getRelated();
 
-        return url()->current();
+        $options = Cache::tags($relatedClass->getTable())->rememberForever($relatedClass->getTable() . "_active", function () use($relatedClass) {
+            return $relatedClass->active()->get();
+        });
+
+        return $options;
     }
 
     /**
-     * Handles list of options for filter
-     * @return string
+     * Gets only filter options that are related to article model
      */
-    protected function handleOptions()
+    private function getRelatedOptions()
     {
-        $collection = collect();
+        $options = collect();
 
         $articles = Cache::tags($this->model->getTable())->rememberForever($this->model->getTable() . "_active_articles_with_".$this->relationName, function () {
             $articles = $this->getModelArticles();
@@ -59,10 +67,23 @@ final class FilterRelation extends AbstractFilter
         });
 
         foreach ($articles as $article) {
-            $collection->push($article->{$this->relationName});
+            $options->push($article->{$this->relationName});
         }
 
-        return $collection->unique();
+        return $options->unique();
+    }
+
+    /**
+     * Handles list of options for filter
+     * @return string
+     */
+    protected function handleOptions()
+    {
+        if($this->relationLoadAll){
+            return $this->getAllOptions();
+        }
+
+        return $this->getRelatedOptions();
     }
 
     /**
@@ -78,6 +99,19 @@ final class FilterRelation extends AbstractFilter
         return $this->getOptions()->first(function ($value, $key) {
             return $value->id === $this->relationSelected->id;
         });
+    }
+
+    /**
+     * Returns noFilterUrl
+     * @return mixed
+     */
+    public function getNoFilterUrl()
+    {
+        if ($this->getSelected()) {
+            return str_replace("/" . $this->getSelected()->getSlug(), "", $this->getSelected()->getUrl());
+        }
+
+        return url()->current();
     }
 
 }

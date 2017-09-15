@@ -332,10 +332,8 @@ class PackageFilterableArticle extends AbstractFilterableArticle
     public function scopeFilterDateRange($query, Carbon $dateFrom, Carbon $dateTo);
 ```
 
-
-
-2. Создать контроллер, который наследует Vis\Articles\Controllers\AbstractArticleController. </br>
-Определить в нём методы ShowSingle, ShowCatalog и ShowSubCatalog, если необходима фильтрация статей по внешней моделе.
+2. Создать контроллер, который наследует Vis\Articles\Controllers\AbstractFilterableArticleController. </br>
+Определить в нём методы ShowSingle, ShowCatalog
 
 ```php
 use Vis\Articles\Controllers\AbstractFilterableArticleController;

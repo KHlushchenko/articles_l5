@@ -54,11 +54,12 @@ final class FilterComposite
      * Adds FilterRelation to filters collection
      * @param $relationName
      * @param $relationSelected
+     * @param $relationLoadAll
      * @return FilterComposite
      */
-    public function addRelation($relationName, $relationSelected): FilterComposite
+    public function addRelation($relationName, $relationSelected, $relationLoadAll = false): FilterComposite
     {
-        $this->filters->put('relation-' . $relationName, new FilterRelation($this->model, $relationName, $relationSelected));
+        $this->filters->put('relation-' . $relationName, new FilterRelation($this->model, $relationName, $relationSelected, $relationLoadAll));
 
         return $this;
     }

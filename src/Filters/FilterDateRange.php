@@ -5,7 +5,8 @@ use Carbon\Carbon;
 
 final class FilterDateRange extends AbstractFilter
 {
-    /** Gets valid Carbon object from any input value
+    /**
+     * Gets valid Carbon object from any input value
      * @param string $field
      * @return Carbon
      */
