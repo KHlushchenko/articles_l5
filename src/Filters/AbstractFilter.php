@@ -57,6 +57,17 @@ abstract class AbstractFilter implements FilterInterface
     }
 
     /**
+     * Sets selected to filter option from options
+     * Returns selected option for filter
+     * @return $this
+     */
+    public function setSelectedToFirstOption()
+    {
+        $this->selected = $this->getOptions()[0];
+        return $this;
+    }
+
+    /**
      * Helper function to get value from array set in model
      * @param string $inputKey
      * @param array $array
