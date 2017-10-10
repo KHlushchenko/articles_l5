@@ -359,7 +359,7 @@ class PackageFilteredArticlesController extends AbstractFilterableArticleControl
 
         $sortOrder  = $filters->getSort()->getSelected();
         $perPage    = $filters->getCount()->getSelected();
-        $filter     = $filters->getRelation('filterModel')->getSelected();
+        $filter     = $filters->getRelation('filterModel')->getSelected() ?: $filters->getRelation('filterModel')->setSelectedToFirstOption()->getSelected();
         $dateRange  = $filters->getDateRange()->getSelected();
         $dateDay    = $filters->getDateDay()->getSelected();
         $dateMonth  = $filters->getDateMonth()->getSelected();

@@ -23,7 +23,7 @@ class ComposerStaticInit07af60b8e95164aae50d9b5dfe2219ff
     public static $classMap = array (
         'Vis\\Articles\\Controllers\\AbstractArticleController' => __DIR__ . '/../..' . '/src/Http/Controllers/AbstractArticleController.php',
         'Vis\\Articles\\Controllers\\AbstractFilterableArticleController' => __DIR__ . '/../..' . '/src/Http/Controllers/AbstractFilterableArticleController.php',
-        'Vis\\Articles\\Controllers\\AbstractSimpleArticleController' => __DIR__ . '/../..' . '/src/Http/Controllers/AbstractSimpleArticleController.php',
+        'Vis\\Articles\\Controllers\\AbstractFilterableDateArticleController' => __DIR__ . '/../..' . '/src/Http/Controllers/AbstractFilterableDateArticleController.php',
         'Vis\\Articles\\Interfaces\\ArticleInterface' => __DIR__ . '/../..' . '/src/Interfaces/ArticleInterface.php',
         'Vis\\Articles\\Interfaces\\DateInterface' => __DIR__ . '/../..' . '/src/Interfaces/DateInterface.php',
         'Vis\\Articles\\Interfaces\\FilterInterface' => __DIR__ . '/../..' . '/src/Interfaces/FilterInterface.php',

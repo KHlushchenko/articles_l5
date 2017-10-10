@@ -8,7 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'Vis\\Articles\\Controllers\\AbstractArticleController' => $baseDir . '/src/Http/Controllers/AbstractArticleController.php',
     'Vis\\Articles\\Controllers\\AbstractFilterableArticleController' => $baseDir . '/src/Http/Controllers/AbstractFilterableArticleController.php',
-    'Vis\\Articles\\Controllers\\AbstractSimpleArticleController' => $baseDir . '/src/Http/Controllers/AbstractSimpleArticleController.php',
+    'Vis\\Articles\\Controllers\\AbstractFilterableDateArticleController' => $baseDir . '/src/Http/Controllers/AbstractFilterableDateArticleController.php',
     'Vis\\Articles\\Interfaces\\ArticleInterface' => $baseDir . '/src/Interfaces/ArticleInterface.php',
     'Vis\\Articles\\Interfaces\\DateInterface' => $baseDir . '/src/Interfaces/DateInterface.php',
     'Vis\\Articles\\Interfaces\\FilterInterface' => $baseDir . '/src/Interfaces/FilterInterface.php',

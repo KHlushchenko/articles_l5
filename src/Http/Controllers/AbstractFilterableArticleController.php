@@ -12,7 +12,8 @@ abstract class AbstractFilterableArticleController extends AbstractArticleContro
     protected $filter;
 
     /**
-     * AbstractFilterableArticleController constructor. Sets filter property with FilterComposite
+     * AbstractFilterableArticleController constructor.
+     * Sets filter property with FilterComposite
      */
     public function __construct()
     {
