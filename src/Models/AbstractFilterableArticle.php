@@ -8,14 +8,14 @@ abstract class AbstractFilterableArticle extends AbstractArticle implements Filt
 {
     /**
      * Defines array of arrays of sorting options
-     * Signature: [ ['name', 'description', 'value']
+     * Signature: [ ['name' => '', 'description' => '', 'value' => ''] ]
      * @var array
      */
     protected $sortOptions = [];
 
     /**
      * Defines array of arrays of counting options
-     * Signature: [ ['name', 'description', 'value']
+     * Signature: [ ['name' => '', 'description' => '', 'value' => ''] ]
      * @var array
      */
     protected $countOptions = [];
