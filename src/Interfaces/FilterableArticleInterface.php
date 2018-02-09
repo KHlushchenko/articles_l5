@@ -64,7 +64,7 @@ interface FilterableArticleInterface extends ArticleInterface
      * @param int $day
      * @return mixed
      */
-    public function scopeFilterDateStrict($query, int $year  = null, int $month  = null, int $day = null);
+    public function scopeFilterDateStrict($query, int $year = 0, int $month = 0, int $day = 0);
 
     /**
      * Scope to filter articles by date field in range

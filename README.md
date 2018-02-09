@@ -323,7 +323,7 @@ class PackageFilterableArticle extends AbstractFilterableArticle
 Метод-фильтр статей по точной дате Y-M-D</br>
 Значение: целое число $year, целое число $month, целое число $day
 ```php
-    public function scopeFilterDateStrict($query, int $year  = null, int $month  = null, int $day = null);
+    public function scopeFilterDateStrict($query, int $year = 0, int $month = 0, int $day = 0)
 ```
 
 Метод-фильтр по промежутку дат</br>
